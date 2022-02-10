@@ -1,17 +1,17 @@
 
-const inn = document.querySelector('#input1');
-const butt = document.querySelector('#button1');
+const searchInput = document.querySelector('#search-input');
+const searchButton = document.querySelector('#search-button');
 const galleryContent  = document.querySelector('.galleryContent');
+const baseUrl =  `https://api.unsplash.com/search/photos`;
 let url = `https://api.unsplash.com/search/photos?query=spring&client_id=uzSdSY8wZC1EyB69bgI6kq30ZokUtw9y_MpsHRVTmGc`;
-async function getData() {
-    const res = await fetch(url);
-    let data = await res.json();
+async function getData(request) {
+    const res = await fetch(`${baseUrl}?query=${request}&client_id=uzSdSY8wZC1EyB69bgI6kq30ZokUtw9y_MpsHRVTmGc`);
+    const data = await res.json();
     showData(data);
-    console.log(url)
+    //console.log(query);
   }
-  getData();
-  async function showData(data) {  
-    
+  getData('spring');
+   function showData(data) {  
      for (let i = 0; i < 9; i++) {
         const img = document.createElement('div');
         img.style.backgroundImage=`url(${data.results[i].urls.regular})`;
@@ -20,37 +20,29 @@ async function getData() {
       }
      
   }
-  async function searchResult() {
+function searchResult() {
     deleteResult();
-     let c = inn.value;
-     url = `https://api.unsplash.com/search/photos?query=${c}&client_id=uzSdSY8wZC1EyB69bgI6kq30ZokUtw9y_MpsHRVTmGc`;
-     getData();
+    request = searchInput.value;
+     //query = searchInput.value;
+    //url = `https://api.unsplash.com/search/photos?query=${request}&client_id=uzSdSY8wZC1EyB69bgI6kq30ZokUtw9y_MpsHRVTmGc`;
+     getData(request);
 
   }
- async  function deleteResult() {
-     for (let i = 0; i<9;i++) {
-        let di = document.querySelector('.gallery-img');
-        di.remove();
-     }
+ function deleteResult() {
+     document.querySelectorAll('.gallery-img').forEach((el)=> el.remove());
    
  }
 
  
- butt.addEventListener('click',searchResult)
-
-
-
- 
-
-
-   function changeImage() {
+searchButton.addEventListener('click',searchResult);
+  function changeImage() {
     
-        inn.addEventListener('keydown', (e) => {
+        searchInput.addEventListener('keydown', (e) => {
             if (e.keyCode === 13) {
                searchResult();
             }
         });
   
     }
-
- inn.addEventListener('focus',changeImage);
+ 
+ searchInput.addEventListener('keydown',changeImage);
